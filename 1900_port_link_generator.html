@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pa">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1900 PORT Link Generator</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f3f6fb;display:flex;justify-content:center;min-height:100vh}
+.card{width:min(94%,430px);margin:auto;background:#fff;border-radius:22px;padding:24px;box-shadow:0 8px 30px #00000018}
+h1{text-align:center;margin:0 0 8px;font-size:25px;color:#222}.sub{text-align:center;color:#666;margin:0 0 22px}
+label{font-weight:700;display:block;margin-bottom:8px}input{width:100%;padding:15px;border:1px solid #d5dbe5;border-radius:12px;font-size:18px;outline:none}
+button{width:100%;border:0;border-radius:12px;padding:15px;font-size:17px;font-weight:700;cursor:pointer;margin-top:12px}
+.gen{background:#1769e0;color:white}.copy{background:#e9f1ff;color:#1254b8}.wa{background:#19a65b;color:white}
+.result{display:none;margin-top:20px;padding:15px;background:#f7f9fc;border-radius:14px}.result small{color:#666}.link{word-break:break-all;margin-top:8px;font-size:14px;color:#1769e0}
+.note{font-size:12px;color:#777;text-align:center;margin-top:18px;line-height:1.5}
+</style>
+</head>
+<body>
+<script>
+(function(){
+ const p=new URLSearchParams(location.search).get("port");
+ if(p && /^[6-9]\d{9}$/.test(p)){
+   window.location.href="sms:1900?body="+encodeURIComponent("PORT "+p);
+ }
+})();
+</script>
+<div class="card">
+  <h1>📩 1900 PORT Link</h1>
+  <p class="sub">Customer ਦਾ mobile number ਪਾਓ</p>
+  <label for="num">Mobile Number</label>
+  <input id="num" type="tel" inputmode="numeric" maxlength="10" placeholder="9350600740">
+  <button class="gen" onclick="makeLink()">🔗 Create 1900 Link</button>
+  <div class="result" id="result">
+    <small>Customer ਨੂੰ ਇਹ link ਭੇਜੋ:</small>
+    <div class="link" id="link"></div>
+    <button class="copy" onclick="copyLink()">📋 Copy Link</button>
+    <button class="wa" onclick="shareWA()">💬 WhatsApp Share</button>
+  </div>
+  <p class="note">Link ਖੋਲ੍ਹਣ ’ਤੇ SMS app ਵਿੱਚ 1900 ਅਤੇ PORT number ready ਹੋਵੇਗਾ। Customer ਨੂੰ ਸਿਰਫ਼ Send ਦਬਾਉਣਾ ਹੈ।</p>
+</div>
+<script>
+let generated="";
+function makeLink(){
+  const n=document.getElementById("num").value.replace(/\D/g,"");
+  if(!/^[6-9]\d{9}$/.test(n)){alert("ਕਿਰਪਾ ਕਰਕੇ 10 digit valid mobile number ਪਾਓ।");return;}
+  generated=location.origin+location.pathname+"?port="+encodeURIComponent(n);
+  document.getElementById("link").textContent=generated;
+  document.getElementById("result").style.display="block";
+}
+async function copyLink(){
+  await navigator.clipboard.writeText(generated);
+  alert("Link copy ਹੋ ਗਿਆ ✅");
+}
+function shareWA(){
+  const text="1900 PORT SMS ਭੇਜਣ ਲਈ ਇਸ link ’ਤੇ click ਕਰੋ:\n"+generated;
+  location.href="https://wa.me/?text="+encodeURIComponent(text);
+}
+</script>
+</body>
+</html>
